@@ -16,7 +16,7 @@ sécurisés.
 - Clean Architecture (Controller / Service / Repository)
 - Dependency Injection via container
 - TypeORM (DataSource centralisé)
-- Authentification (Passport + Session + Redis)
+- Authentification (Passport + Session + Redis + Redis Commander --interface visuel)
 - Middleware de sécurité (rate limit, sanitizer, auth)
 - Cache Redis (middleware)
 - Gestion centralisée des erreurs
