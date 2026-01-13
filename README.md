@@ -25,6 +25,7 @@ sécurisés.
 
 ## 🧱 Architecture
 
+```txt
 src/
 ├── app.js
 ├── server.js
@@ -75,7 +76,7 @@ src/
 │
 └── tests/
 
-
+```
 ---
 
 ## 🔌 Dependency Injection (DI)
