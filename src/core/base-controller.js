@@ -1,58 +1,42 @@
+const asyncHandler = require('../utils/async-handler');
+
 class BaseController {
   /**
-   * @param {BaseService} service - Instance du servuce associé
+   * @param {BaseService} service - Instance du service associé
    */
   constructor(service) {
     this.service = service;
   }
+
   handleRequest(method) {
-    return async (req, res, next) => {
-      try {
-        const result = await this[method](req, res, next);
-        res.json(result);
-      } catch (error) {
-        // TODO: Exécuter la méthode passée en paramètre (this[method])
-        // ATTENTION : Il faut passer req, res, next }
-        // TODO: Passer l'erreur au middleware d'erreur d'Express (next)
-        next(error);
-      }
-    };
-  }
-  async findAll(options) {
-    return this.service.findAll(options);
-  }
-  async getAll(req, res) {
-    // TODO Récupérer les ites via le service
-    // ToDo Renvoyer une réponse Json (status 200 par default)
-    return this.service.getAll(req, res);
-  }
-  async findOne(options) {
-    return this.service.findOne(options);
-  }
-  async findById(id) {
-    return this.service.findById(id);
-  }
-  async getById(req, res) {
-    // TODO Récupérer l'item via le service
-    // ToDo Renvoyer une réponse Json (status 200 par default)
-    return this.service.getById(req, res);
-  }
-  async create(req, res) {
-    // TODO Créer l'item via le service
-    // ToDo Renvoyer une réponse Json (status 201 par default)
-    return this.service.create(req, res);
+    return asyncHandler(this[method].bind(this));
   }
 
-  async update(req, res) {
-    // TODO Mettre à jour l'item via le service
-    //ToDO Renvoyer l'items mis a jour
-    return this.service.update(req, res);
+  // ===== CRUD STANDARD =====
+
+  async findAll(req) {
+    return this.service.findAll(req.query);
   }
 
-  async delete(req, res) {
-    // TODO Supprimer l'item via le service
-    // ToDo Renvoyer
-    return this.service.delete(req, res);
+  async findOne(req) {
+    return this.service.findOne(req.query);
+  }
+
+  async findById(req) {
+    return this.service.findById(req.params.id);
+  }
+
+  async create(req) {
+    return this.service.create(req.body);
+  }
+
+  async update(req) {
+    return this.service.update(req.params.id, req.body);
+  }
+
+  async delete(req) {
+    return this.service.delete(req.params.id);
   }
 }
+
 module.exports = BaseController;
