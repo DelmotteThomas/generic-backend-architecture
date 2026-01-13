@@ -97,6 +97,18 @@ src/
 - AuthService isolé (hash, validation)
 
 ---
+## 📝 Conventions
+
+- Fichiers génériques : `kebab-case`
+- Fichiers métier : `feature.type.js`
+- Classes : `PascalCase`
+- Services / Repositories : une responsabilité unique
+
+## ➕ Ajouter un module
+
+1. Créer `repository / service / controller / routes`
+2. Injecter dans `container.js`
+3. Brancher dans `index.routes.js`
 
 ## 🧪 Tests
 
@@ -122,3 +134,8 @@ docker-compose down -v
 docker compose logs -f app
                                                      
 ```
+
+⚠️ Ce projet suppose une connaissance minimale de Docker et Node.js. ⚠️
+
+Note: le volume Docker écrase node_modules.
+npm install est requis en développement.
