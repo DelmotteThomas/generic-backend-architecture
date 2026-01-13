@@ -1,4 +1,5 @@
 const BaseController = require('../core/base-controller');
+const { ValidationError, ApiError } = require('../errors/api-error');
 
 class AuthController extends BaseController {
   constructor(authService) {
@@ -6,30 +7,33 @@ class AuthController extends BaseController {
     this.authService = authService;
   }
 
-  async register(req, res) {
+  async register(req) {
     const { username, password } = req.body;
 
     try {
-      const result = await this.authService.register(username, password);
-      res.status(201).json(result);
+      return await this.authService.register(username, password);
     } catch (error) {
       if (error.message === 'Username déjà pris') {
-        return res.status(409).json({ message: error.message });
+        throw new ApiError(409, error.message);
       }
 
       if (error.message === 'Username et password requis') {
-        return res.status(400).json({ message: error.message });
+        throw new ValidationError(error.message);
       }
 
       throw error;
     }
   }
 
-  login(req, res) {
-    res.json({
+  login(req) {
+    return {
       message: 'Connecté',
       user: req.user.username,
-    });
+    };
+  }
+
+  getProfile(req) {
+    return req.user;
   }
 }
 
