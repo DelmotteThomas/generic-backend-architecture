@@ -1,4 +1,6 @@
 # Backend Boilerplate – Clean Architecture (Express)
+This repository is a GitHub template.
+Use "Use this template" to start a new project.
 
 Boilerplate backend Node.js basé sur **Clean Architecture**, avec
 **Dependency Injection**, **Express**, **TypeORM**,**PostgreSQL**, **Passport**, **Redis**.
