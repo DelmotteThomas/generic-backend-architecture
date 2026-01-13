@@ -1,20 +1,17 @@
 const AuthService = require('../services/auth.service');
-const {
-  ValidationError,
-  ApiError,
-} = require('../errors/api-error');
+const {ValidationError,ApiError} = require('../errors/api-error');
 
 describe('AuthService', () => {
   let authService;
-  let fakeUserRepository;
+  let mockUserRepository;
 
   beforeEach(() => {
-    fakeUserRepository = {
+    mockUserRepository = {
       findByUsername: jest.fn(),
       create: jest.fn(),
     };
 
-    authService = new AuthService(fakeUserRepository);
+    authService = new AuthService(mockUserRepository);
   });
 
   describe('register()', () => {
@@ -25,7 +22,8 @@ describe('AuthService', () => {
     });
 
     it('throws ApiError if username already exists', async () => {
-      fakeUserRepository.findByUsername.mockResolvedValue({ id: 1 });
+      
+      mockUserRepository.findByUsername.mockResolvedValue({ id: 1 });
 
       await expect(
         authService.register('john', 'password')
@@ -33,8 +31,9 @@ describe('AuthService', () => {
     });
 
     it('creates a user when data is valid', async () => {
-      fakeUserRepository.findByUsername.mockResolvedValue(null);
-      fakeUserRepository.create.mockResolvedValue({
+      // mockResolved value retour
+      mockUserRepository.findByUsername.mockResolvedValue(null);
+      mockUserRepository.create.mockResolvedValue({
         id: 1,
         username: 'john',
       });
@@ -50,7 +49,7 @@ describe('AuthService', () => {
 
   describe('validateUser()', () => {
     it('returns null if user does not exist', async () => {
-      fakeUserRepository.findByUsername.mockResolvedValue(null);
+      mockUserRepository.findByUsername.mockResolvedValue(null);
 
       const result = await authService.validateUser('john', 'password');
 
@@ -58,7 +57,7 @@ describe('AuthService', () => {
     });
 
     it('returns null if password is invalid', async () => {
-      fakeUserRepository.findByUsername.mockResolvedValue({
+      mockUserRepository.findByUsername.mockResolvedValue({
         password: 'hashed',
       });
 
