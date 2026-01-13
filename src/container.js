@@ -17,13 +17,15 @@ const AuthService = require("./services/auth.service");
 
 // --- COUCHE PRESENTATION (Controllers) ---
 const UserController = require("./controllers/user.controller");
+const AuthController = require("./controllers/auth.controller");
 
 async function createContainer() {
-  // 1️ DB — infra critique
+  // 1️ DB — 
+  //Initialisation ordonnée
   await AppDataSource.initialize();
   console.log("DB ready");
 
-  // 2️ Redis — infra optionnelle mais bloquante ici
+  // 2️ Redis — 
   const redis = createRedisClient();
   await redis.connect();
   console.log("Redis ready");
@@ -36,8 +38,9 @@ async function createContainer() {
   // Instancier le UserService en lui injectant le userRepository
   const userService = new UserService(userRepository);
 
-  // TP 3 — Service d'authentification (métier spécifique)
+  // Service d'authentification (métier spécifique)
   const authService = new AuthService(userRepository);
+  const sessionMiddleware = require('./middlewares/session.middleware');
 
   // 5️ Passport — adaptateur auth
   configurePassport(passport, {
@@ -49,14 +52,15 @@ async function createContainer() {
   // 6️ Controllers — couche présentation
   // Instancier le UserController en lui injectant le userService
   const userController = new UserController(userService);
-
+  const authController = new AuthController(authService);
+  
   // 7️ Exposition contrôlée
   // On exporte uniquement les contrôleurs et services prêts à l'emploi
   return {
     passport,
-    redis,
     userController,
-    authService, // utile pour auth.controller (TP 3)
+    authController,
+    sessionMiddleware,
   };
 }
 
