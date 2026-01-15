@@ -33,4 +33,12 @@ describe('BaseService', () => {
     expect(mockRepository.findById).toHaveBeenCalledWith(1);
     expect(result).toEqual({ id: 1 });
   });
+  it('delegates update to repository', async () => {
+  mockRepository.update.mockResolvedValue({ id: 1 });
+
+  const result = await service.update(1, { name: 'John' });
+
+  expect(mockRepository.update).toHaveBeenCalledWith(1, { name: 'John' });
+  expect(result).toEqual({ id: 1 });
+});
 });
