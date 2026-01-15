@@ -46,6 +46,20 @@ describe('AuthService', () => {
       });
     });
   });
+  it('returns user if credentials are valid', async () => {
+  const user = {
+    id: 1,
+    username: 'john',
+    password: 'hashed',
+  };
+
+  mockUserRepository.findByUsername.mockResolvedValue(user);
+  jest.spyOn(require('bcryptjs'), 'compare').mockResolvedValue(true);
+
+  const result = await authService.validateUser('john', 'password');
+
+  expect(result).toEqual(user);
+});
 
   describe('validateUser()', () => {
     it('returns null if user does not exist', async () => {

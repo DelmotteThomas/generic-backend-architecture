@@ -7,7 +7,6 @@ describe('UserService', () => {
   beforeEach(() => {
     fakeRepository = {
       findAll: jest.fn(),
-      findOne: jest.fn(),
       findById: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
@@ -24,5 +23,23 @@ describe('UserService', () => {
 
     expect(fakeRepository.findAll).toHaveBeenCalled();
     expect(result).toEqual([]);
+  });
+
+  it('delegates create to repository', async () => {
+    fakeRepository.create.mockResolvedValue({ id: 1 });
+
+    const result = await userService.create({ name: 'John' });
+
+    expect(fakeRepository.create).toHaveBeenCalledWith({ name: 'John' });
+    expect(result).toEqual({ id: 1 });
+  });
+
+  it('delegates findById to repository', async () => {
+    fakeRepository.findById.mockResolvedValue({ id: 1 });
+
+    const result = await userService.findById(1);
+
+    expect(fakeRepository.findById).toHaveBeenCalledWith(1);
+    expect(result).toEqual({ id: 1 });
   });
 });
